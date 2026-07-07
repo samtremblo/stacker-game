@@ -26,6 +26,8 @@
   var MIN_INTERVAL = 38;           // ms per column step, fastest the game gets
   var DIFFICULTY_FACTOR = 0.8;     // each row's step interval is multiplied by this
   var MAX_WIN_PERCENT = 25;        // payout cap: final row is rigged to fail once win rate hits this
+  var ROW_START_DELAY_MIN = 80;    // ms before a new row's block starts moving
+  var ROW_START_DELAY_MAX = 420;   // randomized so players can't just find a rhythm
 
   var LOCKED_FILL = '#2f7dfb';
   var LOCKED_FILL_LIGHT = '#6fa8ff';
@@ -145,7 +147,8 @@
       finishGame('win');
     } else {
       state = 'falling';
-      setTimeout(function () { if (state === 'falling') state = 'playing'; spawnCurrent(); }, 160);
+      var startDelay = ROW_START_DELAY_MIN + Math.random() * (ROW_START_DELAY_MAX - ROW_START_DELAY_MIN);
+      setTimeout(function () { if (state === 'falling') state = 'playing'; spawnCurrent(); }, startDelay);
     }
   }
 

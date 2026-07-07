@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Stacker</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    background: #000;
+  }
+
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    min-height: 100vh;
+    overflow: auto;
+    font-family: Arial, sans-serif;
+  }
+
+  #scene {
+    position: relative;
+    width: 1080px;
+    height: 1920px;
+    flex: 0 0 auto;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  canvas {
+    position: absolute;
+    top: 0; left: 0;
+  }
+
+  .side-panel {
+    flex: 0 0 auto;
+    width: 240px;
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .control, .stats {
+    background: #16171d;
+    border: 1px solid #2a2c33;
+    border-radius: 12px;
+    padding: 18px;
+    color: #c7cbd6;
+  }
+
+  .control label {
+    display: block;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+  }
+
+  .control input[type="range"] {
+    width: 100%;
+    accent-color: #2f7dfb;
+  }
+
+  .control .value {
+    margin-top: 10px;
+    font: 700 22px "Courier New", monospace;
+    color: #6fa8ff;
+    text-align: right;
+  }
+
+  .stats div {
+    display: flex;
+    justify-content: space-between;
+    font-size: 15px;
+    padding: 6px 0;
+    border-bottom: 1px solid #22242c;
+  }
+
+  .stats div:last-child { border-bottom: none; }
+
+  .stats span { color: #6fa8ff; font-weight: 700; }
+</style>
+</head>
+<body>
+  <div class="side-panel">
+    <div class="control">
+      <label>DIFFICULTY</label>
+      <input type="range" id="difficultySlider" min="1" max="10" step="1" value="5">
+      <div class="value" id="difficultyValue">5</div>
+    </div>
+  </div>
+
+  <div id="scene">
+    <canvas id="game" width="1080" height="1920"></canvas>
+  </div>
+
+  <div class="side-panel">
+    <div class="control">
+      <label>PAYOUT %</label>
+      <input type="range" id="payoutSlider" min="0" max="100" step="5" value="25">
+      <div class="value" id="payoutValue">25%</div>
+    </div>
+    <div class="stats">
+      <div>PLAYED <span id="statsPlayed">0</span></div>
+      <div>WINS <span id="statsWon">0</span></div>
+      <div>WIN RATE <span id="statsWinRate">0%</span></div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      // scale the whole layout down uniformly to fit a normal screen height,
+      // without ever distorting the aspect ratio or upscaling past native size
+      var CONTENT_W = 1080 + 2 * 240 + 2 * 32; // scene + two side panels + gaps
+      var CONTENT_H = 1920;
+      function fit() {
+        var scale = Math.min(window.innerWidth / CONTENT_W, window.innerHeight / CONTENT_H, 1);
+        document.body.style.zoom = scale;
+      }
+      window.addEventListener('resize', fit);
+      fit();
+    })();
+  </script>
+  <script src="game.js"></script>
+</body>
+</html>
